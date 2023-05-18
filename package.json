@@ -12,6 +12,9 @@
 		"url": "https://github.com/meadowsys"
 	},
 	"license": "MIT",
+	"files": [
+		"src"
+	],
 	"dependencies": {
 		"debug": "^4.3.4",
 		"minimist": "^1.2.8",
