@@ -1,0 +1,15 @@
+{
+	"name": "fimd",
+	"version": "0.0.0",
+	"description": "Simple tool to convert markdown files to Fimfiction BBCode",
+	"main": "index.mjs",
+	"bin": {
+		"fimd": "./src/bin.mjs"
+	},
+	"scripts": {},
+	"author": {
+		"name": "Meadowsys",
+		"url": "https://github.com/meadowsys"
+	},
+	"license": "MIT"
+}
