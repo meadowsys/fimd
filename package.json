@@ -11,5 +11,9 @@
 		"name": "Meadowsys",
 		"url": "https://github.com/meadowsys"
 	},
-	"license": "MIT"
+	"license": "MIT",
+	"dependencies": {
+		"remark-parse": "^10.0.2",
+		"unified": "^10.1.2"
+	}
 }
