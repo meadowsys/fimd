@@ -13,7 +13,14 @@
 	},
 	"license": "MIT",
 	"dependencies": {
+		"debug": "^4.3.4",
+		"minimist": "^1.2.8",
 		"remark-parse": "^10.0.2",
 		"unified": "^10.1.2"
+	},
+	"devDependencies": {
+		"@types/debug": "^4.1.7",
+		"@types/minimist": "^1.2.2",
+		"@types/node": "^20.2.0"
 	}
 }
