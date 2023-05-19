@@ -31,8 +31,9 @@ const handle_code = (node, file) => {
 	return `[codeblock${node.lang ? `=${node.lang}` : ""}]${node.value}[/codeblock]`;
 };
 
+// TODO this is like one of those "meta" things, convert to inline
 /** @type {Handler<Definition>} */
-const handle_definition = (node, file) => `// TODO`;
+const handle_definition = (node, file) => ``;
 
 /** @type {Handler<Delete>} */
 const handle_delete = (node, file) => `[s]${handle_children(node.children, file)}[/s]`;
@@ -53,15 +54,23 @@ const handle_footnoteReference = (node, file) => `// TODO`;
 const handle_heading = (node, file) => `[h${node.depth}]${handle_children(node.children, file)}[/h${node.depth}]`;
 
 /** @type {Handler<HTML>} */
-const handle_html = (node, file) => `// TODO`;
+const handle_html = (node, file) => {
+	// TODO handle this in a more elegant way maybe,,?
+	file.fail("no HTML allowed (for now?)", node.position);
+	return "";
+};
 
 /** @type {Handler<Image>} */
-const handle_image = (node, file) => `// TODO`;
+const handle_image = (node, file) => {
+	if (node.title) file.message(`image title "${node.title}" is unused`, node.position);
+	if (node.alt) file.message(`image alt "${node.alt}" is unused`, node.position);
+	return `[img]${node.url}[/img]`;
+};
 
 /** @type {Handler<ImageReference>} */
 const handle_imageReference = (node, file) => {
 	// TODO implement image references
-	file.fail("Image references not supported (yet?)");
+	file.fail("Image references not supported (yet?)", node.position);
 	return ``;
 };
 
@@ -76,15 +85,19 @@ const handle_link = (node, file) => node.title || node.children.length !== 0
 /** @type {Handler<LinkReference>} */
 const handle_linkReference = (node, file) => {
 	// TODO implement link references
-	file.fail("Link references not supported (yet?)");
+	file.fail("Link references not supported (yet?)", node.position);
 	return ``;
 };
 
 /** @type {Handler<List>} */
-const handle_list = (node, file) => `// TODO`;
+const handle_list = (node, file) => {
+	if (node.start && node.start !== 1) file.message("Ordered lists can only start at 1, ignoring start", node.position);
+	if (node.spread) file.message("tf does spread mean?? (please report and send me what triggered this thankies)", node.position);
+	return `[list${node.ordered ? "=1" : ""}]${handle_children(node.children, file)}[/list]`;
+};
 
 /** @type {Handler<ListItem>} */
-const handle_listItem = (node, file) => `// TODO`;
+const handle_listItem = (node, file) => `[*]${handle_children(node.children, file)}`;
 
 /** @type {Handler<Paragraph>} */
 const handle_paragraph = (node, file) => `${handle_children(node.children, file)}\n\n`;
@@ -93,13 +106,23 @@ const handle_paragraph = (node, file) => `${handle_children(node.children, file)
 const handle_strong = (node, file) => `[b]${handle_children(node.children, file)}[/b]`;
 
 /** @type {Handler<Table>} */
-const handle_table = (node, file) => `// TODO`;
+const handle_table = (node, file) => {
+	// ?
+	file.fail("Fimfic has no table support", node.position);
+	return "";
+};
 
 /** @type {Handler<TableCell>} */
-const handle_tableCell = (node, file) => `// TODO`;
+const handle_tableCell = (node, file) => {
+	file.fail("tableCell was called somehow, that's weird (please report)", node.position);
+	return "";
+};
 
 /** @type {Handler<TableRow>} */
-const handle_tableRow = (node, file) => `// TODO`;
+const handle_tableRow = (node, file) => {
+	file.fail("tableRow was called somehow, that's weird (please report)", node.position);
+	return "";
+};
 
 /** @type {Handler<Text>} */
 const handle_text = (node, file) => node.value;
