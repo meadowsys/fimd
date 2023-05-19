@@ -29,7 +29,6 @@ export default function(node, file) {
 		else if (c.type === "thematicBreak") content += thematicBreak(c);
 	}
 
-	content += "[/quote]";
+	content += "[/quote]\n\n";
 	return content;
 }
-// TODO DO THIS LOL
