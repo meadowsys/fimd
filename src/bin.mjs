@@ -7,7 +7,24 @@ import minimist from "minimist";
 import path from "path";
 
 const help_message = `
-<insert help message here>
+Behold, my by-example help message. Totally not copy pasted from the project readme. >.>
+Project repo: https://github.com/Meadowsys/fimd
+
+Simplest usage is to specify an input file and an output file:
+
+   fimd in.md out.txt
+
+You may only supply an input file, then the output file will be printed to stdout, which will show up in the terminal and can also be piped.
+
+   fimd in.md
+
+You can supply pairs of input and output files for bulk conversion. The amount of arguments must be even (ie. all input files must have one output file, so no printing to stdout).
+
+   fimd in1.md out1.txt input-2.md output-2.txt my-story.md my-story-converted.txt
+
+===== CLI options =====
+
+--file-encoding: Sets input file encoding. Output is always in "utf-8". Supported options are what node's "BufferEncoding" supports, which includes "ascii", "utf8", "utf16le", "ucs2", "base64", "base64url", "latin1", "binary", or "hex". When in doubt, don't touch this.
 `.trim();
 
 let args = minimist(process.argv.slice(2), {
