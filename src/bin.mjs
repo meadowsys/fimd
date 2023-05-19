@@ -90,8 +90,8 @@ for (let [src, dest] of files) {
 		}
 	} else {
 		failures++;
-		console.error(`Fatal error convertig ${src}`);
-		console.error(`----------------------${"-".repeat(src.length)}`);
+		console.error(`Fatal error converting ${src}`);
+		console.error(`-----------------------${"-".repeat(src.length)}`);
 		print_message(result.error);
 	}
 }
