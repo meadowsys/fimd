@@ -2,7 +2,7 @@
 
 import remark_parse from "remark-parse";
 import { unified } from "unified";
-import { fimd_remark_plugin } from "./plugin.mjs";
+import { remark_fimd } from "./plugin.mjs";
 import { debug } from "./debug.mjs";
 
 /**
@@ -12,10 +12,12 @@ import { debug } from "./debug.mjs";
 export async function process_md(str) {
 	let vfile = await unified()
 		.use(remark_parse)
-		.use(fimd_remark_plugin)
+		.use(remark_fimd)
 		.process(str);
 
 	debug(`vfile: ${JSON.stringify(vfile)}`);
 
 	return /** @type {string} */(vfile.value);
 }
+
+export { remark_fimd } from "./plugin.mjs";

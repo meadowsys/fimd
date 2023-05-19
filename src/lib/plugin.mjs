@@ -35,7 +35,7 @@ import { debug } from "./debug.mjs";
 /**
  * @type {import("unified").Plugin<[], Root, string>}
  */
-export function fimd_remark_plugin() {
+export function remark_fimd() {
 	/** @type {import("unified").CompilerFunction<Root, string>} */
 	let Compiler = (tree, file) => {
 		debug(`ast: ${JSON.stringify(tree)}`);
