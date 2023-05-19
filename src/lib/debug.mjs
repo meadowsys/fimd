@@ -1,3 +1,5 @@
-
 import _debug from "debug";
-export const debug = _debug("fimd");
+
+const ns = "fimd";
+export const debug = _debug(ns);
+export const debug_enabled = _debug.enabled(ns);

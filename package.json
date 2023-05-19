@@ -21,6 +21,7 @@
 	"dependencies": {
 		"debug": "^4.3.4",
 		"minimist": "^1.2.8",
+		"remark-gfm": "^3.0.1",
 		"remark-parse": "^10.0.2",
 		"unified": "^10.1.2"
 	},

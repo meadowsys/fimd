@@ -10,6 +10,16 @@
 
 ###### heading 6
 
-> blockquote
+> multilineblockquote
 >
-> multiline blockquote
+> multiline blockquote line number 2
+
+`inline code` pag
+
+```js
+function js_code() {
+   return "nice"
+}
+```
+
+~~test strikethrough~~
