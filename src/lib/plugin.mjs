@@ -78,9 +78,12 @@ const handle_imageReference = (node, file) => {
 const handle_inlineCode = (node, file) => `[code]${node.value}[/code]`;
 
 /** @type {Handler<Link>} */
-const handle_link = (node, file) => node.title || node.children.length !== 0
-	? `[${handle_children(node.children, file)}](${node.url}${node.title ? node.title + " " : ""})`
-	: node.url;
+const handle_link = (node, file) => {
+	if (node.title) file.message(`title in links not supported (title "${node.title}")`, node.position);
+	return node.children.length !== 0
+		? `[url=${node.url}]${handle_children(node.children, file)}[/url]`
+		: node.url
+};
 
 /** @type {Handler<LinkReference>} */
 const handle_linkReference = (node, file) => {
