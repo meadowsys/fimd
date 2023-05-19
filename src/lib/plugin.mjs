@@ -26,8 +26,7 @@ import tableRow from "./plugin/tableRow.mjs";
 import text from "./plugin/text.mjs";
 import thematicBreak from "./plugin/thematicBreak.mjs";
 import yaml from "./plugin/yaml.mjs";
-import util from "util";
-import { debug } from "./index.mjs";
+import { debug } from "./debug.mjs";
 
 /**
  * @typedef {import("mdast").Root} Root

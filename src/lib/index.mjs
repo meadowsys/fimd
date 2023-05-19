@@ -3,9 +3,7 @@
 import remark_parse from "remark-parse";
 import { unified } from "unified";
 import { fimd_remark_plugin } from "./plugin.mjs";
-import _debug from "debug";
-
-export const debug = _debug("fimd");
+import { debug } from "./debug.mjs";
 
 /**
  * @param {string} str
