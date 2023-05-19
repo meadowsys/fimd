@@ -6,8 +6,7 @@ import fsp from "fs/promises";
 import k from "kleur";
 import minimist from "minimist";
 import path from "path";
-k.green
-k.red
+
 const help_message = `
 Behold, my by-example help message. Totally not copy pasted from the project readme. >.>
 Project repo: https://github.com/Meadowsys/fimd
