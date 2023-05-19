@@ -48,8 +48,8 @@ else {
 	process.exit(1);
 }
 
-let success = 0;
-let failure = 0;
+let successes = 0;
+let failures = 0;
 
 for (let [src, dest] of files) {
 	let in_file = await fsp.readFile(path.resolve(src), /** @type {BufferEncoding} */ (args["file-encoding"]));
@@ -57,6 +57,7 @@ for (let [src, dest] of files) {
 	let result = await process_md(in_file);
 
 	if (result.success) {
+		successes++;
 		if (result.messages.length > 0) {
 			console.error(`Messages for ${src}`);
 			console.error(`-------------${"-".repeat(src.length)}`);
@@ -71,15 +72,16 @@ for (let [src, dest] of files) {
 			console.log(result.result);
 		}
 	} else {
+		failures++;
 		console.error(`Fatal error convertig ${src}`);
 		console.error(`----------------------${"-".repeat(src.length)}`);
 		print_message(result.error);
 	}
 }
 
-console.error(`Total successes: ${success}`);
-console.error(`Total failures: ${failure}`);
-process.exitCode = failure;
+console.error(`Total successes: ${successes}`);
+console.error(`Total failures: ${failures}`);
+process.exitCode = failures;
 
 /**
  * @param {import("vfile-message").VFileMessage} msg
