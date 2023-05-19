@@ -1,7 +1,6 @@
 // @ts-check
 
 import { process_md } from "./lib/index.mjs";
-import debug from "debug";
 // import fs from "fs";
 import fsp from "fs/promises";
 import minimist from "minimist";
@@ -49,22 +48,45 @@ else {
 	process.exit(1);
 }
 
+let success = 0;
+let failure = 0;
+
 for (let [src, dest] of files) {
 	let in_file = await fsp.readFile(path.resolve(src), /** @type {BufferEncoding} */ (args["file-encoding"]));
 
 	let result = await process_md(in_file);
 
-	if (debug.enabled("fimd")) console.error("\nresult\n\n");
-	if (dest !== "-") {
-		await fsp.writeFile(dest, result + "\n");
+	if (result.success) {
+		if (result.messages.length > 0) {
+			console.error(`Messages for ${src}`);
+			console.error(`-------------${"-".repeat(src.length)}`);
+			result.messages.forEach(print_message);
+			console.error("");
+			console.error("");
+		}
+
+		if (dest !== "-") {
+			await fsp.writeFile(dest, result.result);
+		} else {
+			console.log(result.result);
+		}
 	} else {
-		console.log(result);
+		console.error(`Fatal error convertig ${src}`);
+		console.error(`----------------------${"-".repeat(src.length)}`);
+		print_message(result.error);
 	}
-	// if (debug.enabled("fimd")) {
-	// 	console.error("result:\n\n");
-	// 	console.error(result);
-	// } else
-	// if (dest === "-") {
-	// 	console.log(result);
-	// }
+}
+
+console.error(`Total successes: ${success}`);
+console.error(`Total failures: ${failure}`);
+process.exitCode = failure;
+
+/**
+ * @param {import("vfile-message").VFileMessage} msg
+ */
+function print_message(msg) {
+	let start = `${msg.position?.start.line}:${msg.position?.start.column}`;
+	let end = `${msg.position?.end.line}:${msg.position?.end.column}`;
+	console.error(`   ${start}-${end}: ${msg.message}`);
+	console.error(`      reason: ${msg.reason}`);
 }
