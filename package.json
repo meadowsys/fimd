@@ -7,7 +7,9 @@
 	"bin": {
 		"fimd": "./src/bin.mjs"
 	},
-	"scripts": {},
+	"scripts": {
+		"typecheck": "tsc --noEmit --allowJs --lib es2020 --module es2022 --target es2020 --allowSyntheticDefaultImports --moduleResolution node src/bin.mjs"
+	},
 	"author": {
 		"name": "Meadowsys",
 		"url": "https://github.com/meadowsys"
@@ -25,6 +27,7 @@
 	"devDependencies": {
 		"@types/debug": "^4.1.7",
 		"@types/minimist": "^1.2.2",
-		"@types/node": "^20.2.0"
+		"@types/node": "^20.2.0",
+		"typescript": "^5.0.4"
 	}
 }
