@@ -57,7 +57,7 @@ type Success = {
 
 type Failure = {
    success: false;
-   error:  VFileMessage; // import("vfile-message").VFileMessage
+   error: VFileMessage; // import("vfile-message").VFileMessage
 };
 
 type Result = Success | Failure;
