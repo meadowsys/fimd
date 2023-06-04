@@ -83,8 +83,17 @@ export function remark_fimd() {
 
 		/** @type {Handler<ImageReference>} */
 		const handle_imageReference = (node, file) => {
-			// TODO implement image references
-			return file.fail("Image references not supported (yet?)", node.position);
+			if (node.alt && !(node.referenceType === "collapsed" || node.referenceType === "shortcut")) {
+				file.message("Image alt text not supported by Fimfic", node.position);
+			}
+
+			return () => {
+				let definition = definitions.get(node.identifier);
+				if (!definition) return file.fail(`definition ${node.identifier} not found`);
+				definition.used = true;
+
+				return `[img]${definition.url}[/img]`;
+			};
 		};
 
 		/** @type {Handler<InlineCode>} */
