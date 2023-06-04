@@ -71,8 +71,7 @@ export function remark_fimd() {
 		/** @type {Handler<HTML>} */
 		const handle_html = (node, file) => {
 			// TODO handle this in a more elegant way maybe,,?
-			file.fail("no HTML allowed (for now?)", node.position);
-			return () => "";
+			return file.fail("no HTML allowed (for now?)", node.position);
 		};
 
 		/** @type {Handler<Image>} */
@@ -85,8 +84,7 @@ export function remark_fimd() {
 		/** @type {Handler<ImageReference>} */
 		const handle_imageReference = (node, file) => {
 			// TODO implement image references
-			file.fail("Image references not supported (yet?)", node.position);
-			return () => ``;
+			return file.fail("Image references not supported (yet?)", node.position);
 		};
 
 		/** @type {Handler<InlineCode>} */
@@ -145,20 +143,17 @@ export function remark_fimd() {
 		/** @type {Handler<Table>} */
 		const handle_table = (node, file) => {
 			// ?
-			file.fail("Fimfic has no table support", node.position);
-			return () => "";
+			return file.fail("Fimfic has no table support", node.position);
 		};
 
 		/** @type {Handler<TableCell>} */
 		const handle_tableCell = (node, file) => {
-			file.fail("tableCell was called somehow, that's weird (please report)", node.position);
-			return () => "";
+			return file.fail("tableCell was called somehow, that's weird (please report)", node.position);
 		};
 
 		/** @type {Handler<TableRow>} */
 		const handle_tableRow = (node, file) => {
-			file.fail("tableRow was called somehow, that's weird (please report)", node.position);
-			return () => "";
+			return file.fail("tableRow was called somehow, that's weird (please report)", node.position);
 		};
 
 		/** @type {Handler<Text>} */
