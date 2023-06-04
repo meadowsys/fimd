@@ -8,6 +8,9 @@ import { debug, debug_enabled } from "./debug.mjs";
 export function remark_fimd() {
 	/** @type {import("unified").CompilerFunction<Root, string>} */
 	let Compiler = (tree, file) => {
+		/** @type {Map<string, { url: string, used: boolean, node: Definition }>} */
+		let definitions = new Map();
+
 		/** @type {Handler<Blockquote>} */
 		const handle_blockquote = (node, file) => {
 			let children = handle_children(node.children, file);
@@ -26,9 +29,17 @@ export function remark_fimd() {
 			return () => `[codeblock${node.lang ? `=${node.lang}` : ""}]${node.value}[/codeblock]`;
 		};
 
-		// TODO this is like one of those "meta" things, convert to inline
 		/** @type {Handler<Definition>} */
-		const handle_definition = (node, file) => () => ``;
+		const handle_definition = (node, file) => {
+			// first reference only
+			if (!definitions.has(node.identifier)) definitions.set(node.identifier, { url: node.url, used: false, node });
+			else {
+				file.message(`Duplicate definition: ${node.identifier}`, node.position);
+			}
+
+			if (node.title) file.message(`Link definition titles not supported by Fimfic`, node.position);
+			return () => ``;
+		}
 
 		/** @type {Handler<Delete>} */
 		const handle_delete = (node, file) => {
@@ -94,9 +105,14 @@ export function remark_fimd() {
 
 		/** @type {Handler<LinkReference>} */
 		const handle_linkReference = (node, file) => {
-			// TODO implement link references
-			file.fail("Link references not supported (yet?)", node.position);
-			return () => ``;
+			let children = handle_children(node.children, file);
+			return () => {
+				let definition = definitions.get(node.identifier);
+				if (!definition) return file.fail(`definition ${node.identifier} not found`);
+				definition.used = true;
+
+				return `[url=${definition.url}]${children()}[/url]`;
+			};
 		};
 
 		/** @type {Handler<List>} */
@@ -205,7 +221,13 @@ export function remark_fimd() {
 
 		// the JSON.stringify could be intensive?
 		debug_enabled && debug(`ast: ${JSON.stringify(tree)}`);
-		return handle_children(tree.children, file)();
+		let processed = handle_children(tree.children, file)();
+
+		for (let definition of definitions) {
+			if (!definition[1].used) file.message(`Definition unused: ${definition[0]}`, definition[1].node.position);
+		}
+
+		return processed;
 	};
 
 	Object.assign(this, { Compiler });
