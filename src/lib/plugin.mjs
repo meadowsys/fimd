@@ -104,7 +104,7 @@ export function remark_fimd() {
 			if (node.start && node.start !== 1) file.message("Ordered lists can only start at 1, ignoring start", node.position);
 			if (node.spread) file.message("tf does spread mean?? (please report and send me what triggered this thankies)", node.position);
 			let children = handle_children(node.children, file);
-			return () => `[list${node.ordered ? "=1" : ""}]${children}[/list]`;
+			return () => `[list${node.ordered ? "=1" : ""}]${children()}[/list]`;
 		};
 
 		/** @type {Handler<ListItem>} */
