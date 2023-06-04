@@ -4,7 +4,7 @@ small CLI utility tool tool to convert markdown files to Fimfiction BBCode. Stil
 
 ## dependencies
 
-A javascript runtime and a js package manager. When in doubt, install [node.js](https://nodejs.org), and npm comes bundled with node.js. This package will officially supported latest node 18 and later major versions.
+A javascript runtime and a js package manager. When in doubt, install [node.js](https://nodejs.org), and npm comes bundled with node.js. This package will officially support latest node 18 and later major versions.
 
 ## install
 
@@ -65,4 +65,4 @@ type Result = Success | Failure;
 
 ### `remark_fimd`
 
-See [this file](src/lib/index.mjs#L13) for how its used within this package.
+See [this file](https://github.com/Meadowsys/fimd/blob/wiwi/src/lib/index.mjs#L13) for how its used within this package.
