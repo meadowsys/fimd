@@ -42,11 +42,13 @@ ${k.cyan("--file-encoding")}: Sets input file encoding. Output is always in "utf
    Supported options are what node's "BufferEncoding" supports, which includes "ascii",
    "utf8", "utf16le", "ucs2", "base64", "base64url", "latin1", "binary", or "hex".
    When in doubt, don't touch this.
-
 ${k.cyan("--silent")}, ${k.cyan("-s")}: Emit no CLI output (other than the result
    if printing to stdout). By default, output is emitted if either stdin or stdout
    is not tty (a console).
 ${k.cyan("--no-silent")}: force CLI output regardless of piping
+
+${k.cyan("--help")}, ${k.cyan("-h")}: Displays this help message
+${k.cyan("--version")}, ${k.cyan("-v")}: Displays the version
 `.trim();
 
 let args = minimist(process.argv.slice(2), {
