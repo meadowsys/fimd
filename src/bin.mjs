@@ -50,7 +50,7 @@ ${k.cyan("--no-silent")}: force CLI output regardless of piping
 `.trim();
 
 let args = minimist(process.argv.slice(2), {
-	boolean: ["h", "help", "s", "silent"],
+	boolean: ["h", "help", "s", "silent", "v", "version"],
 	string: ["file-encoding"],
 	default: {
 		"file-encoding": "utf-8",
@@ -70,6 +70,12 @@ let args = minimist(process.argv.slice(2), {
 
 if (args.h || args.help) {
 	console.error(`${help_message}`);
+	process.exit(0);
+}
+
+if (args.v || args.version) {
+	let package_json = await import("../package.json", { assert: { type: "json" }});
+	console.error(`fimd v${package_json.default.version}`);
 	process.exit(0);
 }
 
