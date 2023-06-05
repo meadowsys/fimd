@@ -14,27 +14,50 @@ Simplest usage is to specify an input file and an output file:
 
    ${k.blue("fimd")} ${k.cyan("in.md out.txt")}
 
-You may only supply an input file, then the output file will be printed to stdout,
-which will show up in the terminal and can also be piped.
-
-   ${k.blue("fimd")} ${k.cyan("in.md")}
-
 You can supply pairs of input and output files for bulk conversion. The amount of
 arguments must be even (ie. all input files must have one output file, so no
 printing to stdout).
 
    ${k.blue("fimd")} ${k.cyan("in1.md out1.txt input-2.md output-2.txt my-story.md my-story-converted.txt")}
 
-===== CLI options =====
+You may only supply an input file, then the output file will be printed to stdout,
+which will show up in the terminal and can also be piped.
 
-${k.cyan("--file-encoding")}: Sets input file encoding. Output is always in "utf-8". Supported options are what node's "BufferEncoding" supports, which includes "ascii", "utf8", "utf16le", "ucs2", "base64", "base64url", "latin1", "binary", or "hex". When in doubt, don't touch this.
+   ${k.blue("fimd")} ${k.cyan("in.md")}
+   ${k.blue("fimd")} ${k.cyan("in.md")} ${k.green("|")} ${k.blue("do-something-else")}
+
+If input is being piped to stdin, you can provide one argument to send output to that file,
+or otherwise print it to stdout.
+
+   ${k.blue("cat")} ${k.cyan("my-story.md")} ${k.green("|")} ${k.blue("fimd")} ${k.cyan("my-story.txt")}
+   ${k.blue("cat")} ${k.cyan("my-story.md")} ${k.green("|")} ${k.blue("fimd")}
+
+This can also be used in a pipe chain.
+
+   ${k.blue("cat")} ${k.cyan("my-story.md")} ${k.green("|")} ${k.blue("fimd")} ${k.green("|")} ${k.blue("do-something-else")}
+
+${k.yellow("=====")} CLI options ${k.yellow("=====")}
+
+${k.cyan("--file-encoding")}: Sets input file encoding. Output is always in "utf-8".
+   Supported options are what node's "BufferEncoding" supports, which includes "ascii",
+   "utf8", "utf16le", "ucs2", "base64", "base64url", "latin1", "binary", or "hex".
+   When in doubt, don't touch this.
+
+${k.cyan("--silent")}, ${k.cyan("-s")}: Emit no CLI output (other than the result
+   if printing to stdout). By default, output is emitted if either stdin or stdout
+   is not tty (a console).
+${k.cyan("--no-silent")}: force CLI output regardless of piping
 `.trim();
 
 let args = minimist(process.argv.slice(2), {
-	boolean: ["h", "help"],
+	boolean: ["h", "help", "s", "silent"],
 	string: ["file-encoding"],
 	default: {
-		"file-encoding": "utf-8"
+		"file-encoding": "utf-8",
+		// this will be turned into a bool if flags specified
+		// can be used to detect if flags have been set
+		"silent": "",
+		"s": ""
 	},
 	unknown(arg) {
 		if (arg.startsWith("-")) {
@@ -90,6 +113,12 @@ if (args._.length > 0 && args._.length % 2 === 0) {
 	process.exit(1);
 }
 
+let silent = should_be_silent();
+/** @type {typeof console["error"]} */
+let print_stderr = silent ? () => {} : (...args) => {
+	console.error(...args);
+}
+
 let successes = 0;
 let failures = 0;
 
@@ -101,11 +130,11 @@ for (let [src, dest] of files) {
 	if (result.success) {
 		successes++;
 		if (result.messages.length > 0) {
-			console.error(`${k.yellow("Messages")} for ${typeof src === "string" ? k.yellow(src) : "stdin"}`);
-			console.error(`-------------${"-".repeat(typeof src === "string" ? src.length : "stdin".length)}`);
+			print_stderr(`${k.yellow("Messages")} for ${typeof src === "string" ? k.yellow(src) : "stdin"}`);
+			print_stderr(`-------------${"-".repeat(typeof src === "string" ? src.length : "stdin".length)}`);
 			result.messages.forEach(print_message);
-			console.error("");
-			console.error("");
+			print_stderr("");
+			print_stderr("");
 		}
 
 		if (dest !== "-") {
@@ -115,15 +144,15 @@ for (let [src, dest] of files) {
 		}
 	} else {
 		failures++;
-		console.error(`${k.red("Fatal error")} converting ${typeof src === "string" ? k.red(src) : "stdin"}`);
-		console.error(`-----------------------${"-".repeat(typeof src === "string" ? src.length : "stdin".length)}`);
+		print_stderr(`${k.red("Fatal error")} converting ${typeof src === "string" ? k.red(src) : "stdin"}`);
+		print_stderr(`-----------------------${"-".repeat(typeof src === "string" ? src.length : "stdin".length)}`);
 		print_message(result.error);
 	}
 }
 
-successes > 0 && console.error(k.green(`Total successes: ${successes}`));
-failures > 0 && console.error(k.red(`Total failures: ${failures}`));
-if (successes === 0 && failures === 0) console.error(k.yellow("Nothing processed"));
+successes > 0 && print_stderr(k.green(`Total successes: ${successes}`));
+failures > 0 && print_stderr(k.red(`Total failures: ${failures}`));
+if (successes === 0 && failures === 0) print_stderr(k.yellow("Nothing processed"));
 process.exitCode = failures;
 
 /**
@@ -132,6 +161,18 @@ process.exitCode = failures;
 function print_message(msg) {
 	let start = `${msg.position?.start.line}:${msg.position?.start.column}`;
 	let end = `${msg.position?.end.line}:${msg.position?.end.column}`;
-	console.error(`   ${k.yellow(start)}-${k.yellow(end)}: ${msg.message}`);
-	console.error(`      ${k.yellow("reason")}: ${msg.reason}`);
+	print_stderr(`   ${k.yellow(start)}-${k.yellow(end)}: ${msg.message}`);
+	print_stderr(`      ${k.yellow("reason")}: ${msg.reason}`);
+}
+
+/**
+ * called if piping-activated silent should be handled
+ */
+function should_be_silent() {
+	if (typeof args.silent === "string" && typeof args.s === "string") {
+		return process.stdout.isTTY || process.stderr.isTTY;
+	}
+	if (typeof args.silent === "string") return args.s;
+	if (typeof args.s === "string") return args.silent
+	console.error(`contradictory silent flags passed\n\n${help_message}`);
 }
