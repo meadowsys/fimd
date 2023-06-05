@@ -78,8 +78,9 @@ if (args._.length > 0 && args._.length % 2 === 0) {
 		console.error(`Invalid arguments, see help message on how to use\n\n${help_message}`);
 		process.exit(1);
 	}
-} else if (args._.length === 0 && !process.stdin.isTTY && !process.stdout.isTTY) {
+} else if (args._.length === 0 && !process.stdin.isTTY) {
 	// piper, like `cmd | fimd | other-cmd`
+	// or `cmd | fimd` and printing output
 	files.push([
 		process.stdin.fd,
 		process.stdout.fd
