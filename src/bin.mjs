@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // @ts-check
 
 import { process_md } from "./lib/index.mjs";
