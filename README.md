@@ -14,6 +14,20 @@ Install with package manager of choice. The package is `fimd` on npm. For exampl
 npm install -g fimd
 ```
 
+## updating
+
+Update using your package manager's upgrade command, for example:
+
+```sh
+npm update -g fimd
+```
+
+Alternatively, install it again:
+
+```sh
+npm install -g fimd@latest
+```
+
 ## usage
 
 Simplest usage is to specify an input file and an output file:
