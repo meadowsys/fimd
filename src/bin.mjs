@@ -181,11 +181,20 @@ function print_message(msg) {
  * called if piping-activated silent should be handled
  */
 function should_be_silent() {
+	// setting none
 	if (typeof args.silent === "string" && typeof args.s === "string") {
+		// if either is a pipe (not tty), then do silent
 		return !process.stdout.isTTY || !process.stderr.isTTY;
 	}
+
+	// if either but not both of these arguments are a boolean (present), then return them
 	if (typeof args.silent === "boolean" && typeof args.s === "string") return args.silent;
 	if (typeof args.silent === "string" && typeof args.s === "boolean") return args.s;
+
+	// both are boolean
+	// if theyre not the same, that's weird, just defeault to false
+	// if they are the same, that's still kinda weird why would you do that,
+	// but its not ambiguous and we can return that setting
 	if (args.silent !== args.s) {
 		console.error(`contradictory silent flags passed\n\n${help_message}`);
 		return false;
