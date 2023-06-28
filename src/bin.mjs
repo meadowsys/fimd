@@ -182,9 +182,12 @@ function print_message(msg) {
  */
 function should_be_silent() {
 	if (typeof args.silent === "string" && typeof args.s === "string") {
-		return process.stdout.isTTY || process.stderr.isTTY;
+		return !process.stdout.isTTY || !process.stderr.isTTY;
 	}
-	if (typeof args.silent === "string") return args.s;
-	if (typeof args.s === "string") return args.silent
-	console.error(`contradictory silent flags passed\n\n${help_message}`);
+	if (typeof args.silent === "boolean" && typeof args.s === "string") return args.silent;
+	if (typeof args.silent === "string" && typeof args.s === "boolean") return args.s;
+	if (args.silent !== args.s) {
+		console.error(`contradictory silent flags passed\n\n${help_message}`);
+		return false;
+	} else return args.silent;
 }
