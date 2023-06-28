@@ -107,8 +107,11 @@ if (args._.length > 0 && args._.length % 2 === 0) {
 			path.resolve(args._[0])
 		]);
 	} else {
-		console.error(`Invalid arguments, see help message on how to use\n\n${help_message}`);
-		process.exit(1);
+		// we print to console anyway
+		files.push([
+			path.resolve(args._[0]),
+			process.stdout.fd
+		]);
 	}
 } else if (args._.length === 0 && !process.stdin.isTTY) {
 	// piper, like `cmd | fimd | other-cmd`
