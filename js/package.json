@@ -2,7 +2,6 @@
 	"name": "fimd",
 	"version": "0.0.0",
 	"description": "Simple tool to convert markdown files to Fimfiction BBCode",
-	"packageManager": "pnpm@8.5.1",
 	"exports": "./src/lib/index.mjs",
 	"bin": {
 		"fimd": "./src/bin.mjs"
