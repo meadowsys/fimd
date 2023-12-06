@@ -35,7 +35,7 @@ jobs:
 
     - name: "publish to npm"
       run: |
-        cp .github/.npmrc .npmrc
+        cp .github/.npmrc js/.npmrc
         VERSION=${GITHUB_REF#refs/*/v} node .github/prepare.cjs
         cd js
         npm publish
