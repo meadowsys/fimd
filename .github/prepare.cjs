@@ -6,7 +6,7 @@ if (!process.env.VERSION) {
 	process.exit(1);
 }
 
-const pkg = require("../package.json");
+const pkg = require("../js/package.json");
 pkg.version = process.env.VERSION;
 
-writeFileSync(resolve(__dirname, "../package.json"), Buffer.from(JSON.stringify(pkg, null, "\t") + "\n"));
+writeFileSync(resolve(__dirname, "../js/package.json"), Buffer.from(JSON.stringify(pkg, null, "\t") + "\n"));
