@@ -37,6 +37,6 @@ jobs:
       run: |
         VERSION=${GITHUB_REF#refs/*/v} node .github/prepare.cjs
         cd js
-        pnpm publish --no-git-checks
+        npm publish
       env:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
