@@ -1,0 +1,11 @@
+[workspace.package]
+edition = "2021"
+authors = ["Meadowsys"]
+repository = "https://github.com/meadowsys/fimd"
+license = "MIT"
+
+[workspace]
+resolver = "2"
+members = [
+	"rs"
+]
